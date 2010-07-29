@@ -1,6 +1,6 @@
 class Pagem  
-  module MedidataButtonsHelpers
-  end
+  #module MedidataButtonsHelpers
+  #end
   
   include MedidataButtonsHelpers
   include ActionView::Helpers::TagHelper
