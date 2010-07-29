@@ -1,5 +1,12 @@
+Manifest
 README.rdoc
 Rakefile
 lib/pagem.rb
+pagem.gemspec
+public/images/arrow_left.gif
+public/images/arrow_leftend.gif
+public/images/arrow_right.gif
+public/images/arrow_rightend.gif
+public/stylesheets/pagem.css
+rails/init.rb
 spec/pagem_spec.rb
-Manifest
