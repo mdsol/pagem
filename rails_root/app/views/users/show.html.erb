@@ -1,0 +1,6 @@
+<% user = User.find_by_first_name("Bob") %>
+<% user = User.find_by_first_name("Jane") if user.blank? %>
+<%= user.audits.last.pretty_string %>
+<%= link_to "Delete User", user, :method => :delete %> 
+
+

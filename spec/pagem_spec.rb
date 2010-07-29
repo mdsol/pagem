@@ -1,10 +1,12 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/spec_helper'
+require 'lib/pagem'
 
 describe Pagem do
   before(:each) do
     @scope = mock("Scope")
     @scope.stub(:count).and_return(101)
-    @pager = PaginationHelper.new(@scope, {:page => 1})
+    @pager = Pagem.new(@scope, {:page => 1})
+    @pager.stub('medidata_icon_link').and_return('')
   end
 
   it "should default the page_variable to 'page'" do
@@ -12,7 +14,7 @@ describe Pagem do
   end
   
   it "should properly set the page_variable" do
-    @pager = PaginationHelper.new(@scope, {:page => 1}, {:page_variable => :foo})
+    @pager = Pagem.new(@scope, {:page => 1}, {:page_variable => :foo})
     @pager.instance_eval { @page_variable}.should == :foo
   end
   
@@ -27,7 +29,7 @@ describe Pagem do
   end
   
   it "should return the paged scope for the 2nd page" do
-    @pager = PaginationHelper.new(@scope, {:page => 2})
+    @pager = Pagem.new(@scope, {:page => 2})
     @scope.should_receive(:scoped).with({:limit => 10, :offset => 10}).and_return(@scope)
     @scope.should_receive(:all).and_return(@scope)
     @pager.paged_scope.should == @scope
@@ -36,7 +38,7 @@ describe Pagem do
   it "should return an empty array if there are no results" do
     @scope = mock("Scope")
     @scope.stub(:count).and_return(0)
-    @pager = PaginationHelper.new(@scope, {:page => 1})
+    @pager = Pagem.new(@scope, {:page => 1})
     @pager.paged_scope.should == []
   end
   
@@ -45,7 +47,7 @@ describe Pagem do
   end
   
   it "should return the proper items per page" do
-    @pager = PaginationHelper.new(@scope, {:page => 1}, {:items_per_page => 20})
+    @pager = Pagem.new(@scope, {:page => 1}, {:items_per_page => 20})
     @pager.items_per_page.should == 20
   end
   
@@ -62,22 +64,22 @@ describe Pagem do
   end
   
   it "should return the first page if the page is less than 1" do
-    @pager = PaginationHelper.new(@scope, {:page => 0})
+    @pager = Pagem.new(@scope, {:page => 0})
     @pager.current_page.should == 1
   end
   
   it "should return the first page if the page is invalid" do
-    @pager = PaginationHelper.new(@scope, {:page => 'a'})
+    @pager = Pagem.new(@scope, {:page => 'a'})
     @pager.current_page.should == 1
   end
   
   it "should return the first page if the page is not given" do
-    @pager = PaginationHelper.new(@scope, {})
+    @pager = Pagem.new(@scope, {})
     @pager.current_page.should == 1
   end
   
   it "should return the last page if the page is greater than the total pages" do
-    @pager = PaginationHelper.new(@scope, {:page => 100})
+    @pager = Pagem.new(@scope, {:page => 100})
     @pager.current_page.should == 11
   end
   
@@ -88,14 +90,14 @@ describe Pagem do
   it "should render empty if there are no pages" do
     @scope = mock("Scope")
     @scope.stub(:count).and_return(0)
-    @pager = PaginationHelper.new(@scope, {:page => 1})
+    @pager = Pagem.new(@scope, {:page => 1})
     @pager.render.should == ""
   end
   
   it "should render empty if there is one page" do
     @scope = mock("Scope")
     @scope.stub(:count).and_return(10)
-    @pager = PaginationHelper.new(@scope, {:page => 1})
+    @pager = Pagem.new(@scope, {:page => 1})
     @pager.render.should == ""
   end
   

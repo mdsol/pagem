@@ -1,4 +1,7 @@
 class Pagem  
+  module MedidataButtonsHelpers
+  end
+  
   include MedidataButtonsHelpers
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper
@@ -91,5 +94,7 @@ class Pagem
   
   def onkeypress_script
     "if(event.keyCode == 13) Pager.setPage(this, '#{@page_variable}', this.value, #{@is_remote});"
-  end
+  end  
 end
+
+
