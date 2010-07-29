@@ -15,7 +15,7 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = true
 end
 
-Echoe.new('pagem', '1.0.2') do |p|
+Echoe.new('pagem', '1.0.3') do |p|
   p.description                       = "Pagination helper that works off of scopes (named) to facilitate data retrieval and display."
   p.url                               = "http://github.com/mdsol/pagem"
   p.author                            = "David Fenster"
