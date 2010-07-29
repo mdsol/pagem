@@ -1,7 +1,4 @@
-class Pagem  
-  #module MedidataButtonsHelpers
-  #end
-  
+class Pagem    
   include MedidataButtonsHelpers
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper

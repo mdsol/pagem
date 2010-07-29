@@ -11,4 +11,9 @@ require 'rails_generator/scripts/destroy'
 require 'fileutils'
 require 'ruby-debug'
 require 'spec'
+
+module MedidataButtonsHelpers
+end
+
 Debugger.start
+
