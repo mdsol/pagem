@@ -4,7 +4,10 @@ Rails gem pagination helper that works off of scopes (named) to facilitate data 
 
 == Install 
 
-  gem install pagem --source http://github.com/mdsol/pagem
+  Use the bundler gem (sudo gem install bundler)
+  Add the following to your Gemfile
+
+    gem "pagem", :git => "git://github.com/mdsol/pagem.git"
   
 == Usage
 
