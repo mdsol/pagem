@@ -52,13 +52,13 @@ class Pagem
     
     if(tp > 1)
       href = "##{@page_variable}"
-    
+   
       content_tag('div',
-      (medidata_icon_link('pagem/arrow_leftend', 'First', href, link_options(1, p > 1)) +
-      medidata_icon_link('pagem/arrow_left', 'Previous', href, link_options(p - 1, p > 1)) +
+      (medidata_icon_link('pagem/arrow_leftend', I18n.t('application.pagination.first', :default => "First"), href, link_options(1, p > 1)) +
+      medidata_icon_link('pagem/arrow_left', I18n.t('application.pagination.previous', :default => "Previous"), href, link_options(p - 1, p > 1)) +
       pager_section(p, tp) +
-      medidata_icon_link('pagem/arrow_right', 'Next', href, link_options(p + 1, p < tp, true)) +
-      medidata_icon_link('pagem/arrow_rightend', 'Last', href, link_options(tp, p < tp, true))) +
+      medidata_icon_link('pagem/arrow_right', I18n.t('application.pagination.next', :default => "Next"), href, link_options(p + 1, p < tp, true)) +
+      medidata_icon_link('pagem/arrow_rightend', I18n.t('application.pagination.last', :default => "Last"), href, link_options(tp, p < tp, true))) +
       hidden_field_tag(@page_variable, ""),
        {:class => 'pagination', :name => @page_variable})
     else
@@ -82,7 +82,7 @@ class Pagem
   end
   
   def pager_section(page_number, total_pages)
-    content_tag('span', text_field_tag(nil, page_number, :maxlength => '5', :style => "width:30px; margin:0;", :onkeypress => onkeypress_script) + " of #{total_pages} ", {:class => 'page_picker'})
+    content_tag('span', text_field_tag(nil, page_number, :maxlength => '5', :style => "width:30px; margin:0;", :onkeypress => onkeypress_script) + " #{I18n.t('application.pagination.of', :default => "of")} #{total_pages} ", {:class => 'page_picker'})
   end
   
   def onclick_script(page_number)

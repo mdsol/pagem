@@ -1,0 +1,47 @@
+GEM
+  remote: http://rubygems.org/
+  remote: http://gems.github.com/
+  specs:
+    actionmailer (2.3.4)
+      actionpack (= 2.3.4)
+    actionpack (2.3.4)
+      activesupport (= 2.3.4)
+      rack (~> 1.0.0)
+    activerecord (2.3.4)
+      activesupport (= 2.3.4)
+    activeresource (2.3.4)
+      activesupport (= 2.3.4)
+    activesupport (2.3.4)
+    allison (2.0.3)
+    columnize (0.3.2)
+    echoe (4.5.6)
+      allison
+      gemcutter
+      rubyforge
+    gemcutter (0.7.0)
+    json_pure (1.5.1)
+    linecache (0.43)
+    rack (1.0.1)
+    rails (2.3.4)
+      actionmailer (= 2.3.4)
+      actionpack (= 2.3.4)
+      activerecord (= 2.3.4)
+      activeresource (= 2.3.4)
+      activesupport (= 2.3.4)
+      rake (>= 0.8.3)
+    rake (0.8.7)
+    ruby-debug (0.10.3)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.3.0)
+    ruby-debug-base (0.10.3)
+      linecache (>= 0.3)
+    rubyforge (2.0.4)
+      json_pure (>= 1.1.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  echoe
+  rails (= 2.3.4)
+  ruby-debug (= 0.10.3)
