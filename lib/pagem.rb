@@ -54,11 +54,11 @@ class Pagem
       href = "##{@page_variable}"
    
       content_tag('div',
-      (medidata_icon_link('pagem/arrow_leftend', I18n.t('application.pagination.first', :default => "First"), href, link_options(1, p > 1)) +
-      medidata_icon_link('pagem/arrow_left', I18n.t('application.pagination.previous', :default => "Previous"), href, link_options(p - 1, p > 1)) +
+        (medidata_icon_link('/images/pagem/arrow_leftend.gif', I18n.t('application.pagination.first', :default => "First"), href, link_options(1, p > 1)) +
+      medidata_icon_link('/images/pagem/arrow_left.gif', I18n.t('application.pagination.previous', :default => "Previous"), href, link_options(p - 1, p > 1)) +
       pager_section(p, tp) +
-      medidata_icon_link('pagem/arrow_right', I18n.t('application.pagination.next', :default => "Next"), href, link_options(p + 1, p < tp, true)) +
-      medidata_icon_link('pagem/arrow_rightend', I18n.t('application.pagination.last', :default => "Last"), href, link_options(tp, p < tp, true))) +
+      medidata_icon_link('/images/pagem/arrow_right.gif', I18n.t('application.pagination.next', :default => "Next"), href, link_options(p + 1, p < tp, true)) +
+      medidata_icon_link('/images/pagem/arrow_rightend.gif', I18n.t('application.pagination.last', :default => "Last"), href, link_options(tp, p < tp, true))) +
       hidden_field_tag(@page_variable, ""),
        {:class => 'pagination', :name => @page_variable})
     else
