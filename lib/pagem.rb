@@ -78,6 +78,7 @@ class Pagem
       options = {:class => 'disabled', :disabled => 'true'}
     end
     options[:class] = (options[:class] ? "iconlink_right #{options[:class]}" : "iconlink_right") if(right_side)
+    options[:globalurl] = true
     return options
   end
   
