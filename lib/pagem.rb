@@ -9,7 +9,7 @@ class Pagem
   
   def initialize(scope, params, opt = {})
     @page_variable = opt[:page_variable] || :page
-    @count = scope.count
+    @count = opt[:count_number] || scope.count
     @scope = scope
     @params = params
     @items_per_page = opt[:items_per_page] || ITEMS_PER_PAGE
