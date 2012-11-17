@@ -22,10 +22,23 @@ describe Pagem do
     @pager.scope.should == @scope
   end
   
-  it "should return the paged scope" do
-    @scope.should_receive(:scoped).with({:limit => 10, :offset => 0}).and_return(@scope)
-    @scope.should_receive(:all).and_return(@scope)
-    @pager.paged_scope.should == @scope
+  context "given a scopable collection" do
+    before :each do
+      @scope.stub(:scoped).and_return(@scope)
+    end
+
+    it "should return the paged scope" do
+      @scope.should_receive(:scoped).with({:limit => 10, :offset => 0}).and_return(@scope)
+      @scope.should_receive(:all).and_return(@scope)
+      @pager.paged_scope.should == @scope
+    end
+  end
+
+  context "given a non-scopable collection" do
+    it "should slice the collection" do
+      @scope.should_receive(:slice).with(0, 10).and_return([*1..10])
+      @pager.paged_scope.should == [*1..10]
+    end
   end
   
   it "should return the paged scope for the 2nd page" do
