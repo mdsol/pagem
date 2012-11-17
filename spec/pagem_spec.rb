@@ -3,7 +3,7 @@ require 'lib/pagem'
 
 describe Pagem do
   before(:each) do
-    @scope = mock("Scope")
+    @scope = mock("Scope", :respond_to? => true)
     @scope.stub(:count).and_return(101)
     @pager = Pagem.new(@scope, {:page => 1})
     @pager.stub('medidata_icon_link').and_return('')
@@ -23,29 +23,36 @@ describe Pagem do
   end
   
   context "given a scopable collection" do
-    before :each do
-      @scope.stub(:scoped).and_return(@scope)
-    end
-
     it "should return the paged scope" do
       @scope.should_receive(:scoped).with({:limit => 10, :offset => 0}).and_return(@scope)
+      @scope.should_receive(:all).and_return(@scope)
+      @pager.paged_scope.should == @scope
+    end
+
+    it "should return the paged scope for the 2nd page" do
+      @pager = Pagem.new(@scope, {:page => 2})
+      @scope.should_receive(:scoped).with({:limit => 10, :offset => 10}).and_return(@scope)
       @scope.should_receive(:all).and_return(@scope)
       @pager.paged_scope.should == @scope
     end
   end
 
   context "given a non-scopable collection" do
+    before :each do
+      @scope.stub(:respond_to?).with(:scoped).and_return(false)
+      @values = [*1..30]
+    end
+
     it "should slice the collection" do
-      @scope.should_receive(:slice).with(0, 10).and_return([*1..10])
+      @scope.should_receive(:slice).with(0, 10).and_return(@values.slice(0,10))
       @pager.paged_scope.should == [*1..10]
     end
-  end
-  
-  it "should return the paged scope for the 2nd page" do
-    @pager = Pagem.new(@scope, {:page => 2})
-    @scope.should_receive(:scoped).with({:limit => 10, :offset => 10}).and_return(@scope)
-    @scope.should_receive(:all).and_return(@scope)
-    @pager.paged_scope.should == @scope
+
+    it "should slice the collection correctly to return the paged scope for the 2nd page" do
+      @pager = Pagem.new(@scope, {:page => 2})
+      @scope.should_receive(:slice).with(10, 10).and_return(@values.slice(10, 10))
+      @pager.paged_scope.should == [*11..20]
+    end
   end
   
   it "should return an empty array if there are no results" do

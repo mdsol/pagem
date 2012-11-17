@@ -22,7 +22,12 @@ class Pagem
   def paged_scope
     p = current_page
     if(current_page > 0)
-      return scope.scoped({:limit => items_per_page, :offset => ((current_page - 1) * items_per_page)}).all
+      scoped_options = {:limit => items_per_page, :offset => ((current_page - 1) * items_per_page)}
+      if scope.respond_to?(:scoped)
+        return scope.scoped(scoped_options).all
+      else
+        return scope.slice(scoped_options[:offset], scoped_options[:limit])
+      end
     else
       return []
     end
