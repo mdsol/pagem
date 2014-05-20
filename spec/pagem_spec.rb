@@ -5,6 +5,7 @@ describe Pagem do
   before(:each) do
     @scope = mock("Scope")
     @scope.stub(:count).and_return(101)
+    @scope.stub(:limit => @scope, :offset => @scope)
     @pager = Pagem.new(@scope, {:page => 1})
     @pager.stub('medidata_icon_link').and_return('')
   end
@@ -21,27 +22,38 @@ describe Pagem do
   it "should return the original scope" do
     @pager.scope.should == @scope
   end
-  
-  it "should return the paged scope" do
-    @scope.should_receive(:scoped).with({:limit => 10, :offset => 0}).and_return(@scope)
-    @scope.should_receive(:all).and_return(@scope)
-    @pager.paged_scope.should == @scope
+
+  describe "#paged_scope" do
+    it "limits to items_per_page" do
+      @scope.should_receive(:limit).with(@pager.items_per_page)
+      @pager.paged_scope
+    end
+
+    it "applies an offset for the current page" do
+      @scope.should_receive(:offset).with(0)
+      @pager.paged_scope
+    end
+
+
+    it "returns the paged scope" do
+      @scope.stub(:offset => @scope)
+      @pager.paged_scope.should == @scope
+    end
+
+    it "builds the offset for the 2nd page" do
+      @pager = Pagem.new(@scope, {:page => 2})
+      @scope.should_receive(:offset).with(10)
+      @pager.paged_scope
+    end
+
+    it "returns an empty array if there are no results" do
+      @scope = mock("Scope")
+      @scope.stub(:count).and_return(0)
+      @pager = Pagem.new(@scope, {:page => 1})
+      @pager.paged_scope.should == []
+    end
   end
-  
-  it "should return the paged scope for the 2nd page" do
-    @pager = Pagem.new(@scope, {:page => 2})
-    @scope.should_receive(:scoped).with({:limit => 10, :offset => 10}).and_return(@scope)
-    @scope.should_receive(:all).and_return(@scope)
-    @pager.paged_scope.should == @scope
-  end
-  
-  it "should return an empty array if there are no results" do
-    @scope = mock("Scope")
-    @scope.stub(:count).and_return(0)
-    @pager = Pagem.new(@scope, {:page => 1})
-    @pager.paged_scope.should == []
-  end
-  
+
   it "should return the default items per page" do
     @pager.items_per_page.should == 10
   end
