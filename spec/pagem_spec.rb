@@ -3,7 +3,7 @@ require File.expand_path("../../lib/pagem", __FILE__)
 
 describe Pagem do
   before(:each) do
-    @scope = mock("Scope")
+    @scope = double("Scope")
     @scope.stub(:count).and_return(101)
     @scope.stub(:limit => @scope, :offset => @scope)
     @pager = Pagem.new(@scope, {:page => 1})
@@ -47,7 +47,7 @@ describe Pagem do
     end
 
     it "returns an empty array if there are no results" do
-      @scope = mock("Scope")
+      @scope = double("Scope")
       @scope.stub(:count).and_return(0)
       @pager = Pagem.new(@scope, {:page => 1})
       @pager.paged_scope.should == []
@@ -100,14 +100,14 @@ describe Pagem do
   end
   
   it "should render empty if there are no pages" do
-    @scope = mock("Scope")
+    @scope = double("Scope")
     @scope.stub(:count).and_return(0)
     @pager = Pagem.new(@scope, {:page => 1})
     @pager.render.should == ""
   end
   
   it "should render empty if there is one page" do
-    @scope = mock("Scope")
+    @scope = double("Scope")
     @scope.stub(:count).and_return(10)
     @pager = Pagem.new(@scope, {:page => 1})
     @pager.render.should == ""
