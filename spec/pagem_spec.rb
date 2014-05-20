@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/spec_helper'
-require 'lib/pagem'
+require File.expand_path("../../lib/pagem", __FILE__)
 
 describe Pagem do
   before(:each) do
