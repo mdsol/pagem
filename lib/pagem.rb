@@ -19,9 +19,9 @@ class Pagem
     @scope
   end
 
-  # Returns a scope for the currently selected page, or an empty array if current_page is not valid.
+  # Returns a scope for the currently selected page, or an empty scope if current_page is not valid.
   def paged_scope
-    (current_page > 0) ? scope.limit(items_per_page).offset((current_page - 1) * items_per_page) : []
+    (current_page > 0) ? scope.limit(items_per_page).offset((current_page - 1) * items_per_page) : scope.where('0=1')
   end
 
   def items_per_page

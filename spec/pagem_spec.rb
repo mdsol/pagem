@@ -5,7 +5,7 @@ describe Pagem do
   before(:each) do
     @scope = double("Scope")
     @scope.stub(:count).and_return(101)
-    @scope.stub(:limit => @scope, :offset => @scope)
+    @scope.stub(:where => @scope, :limit => @scope, :offset => @scope)
     @pager = Pagem.new(@scope, {:page => 1})
     @pager.stub('medidata_icon_link').and_return('')
   end
@@ -48,7 +48,7 @@ describe Pagem do
 
     it "returns an empty array if there are no results" do
       @scope = double("Scope")
-      @scope.stub(:count).and_return(0)
+      @scope.stub(:count => 0, :where => [])
       @pager = Pagem.new(@scope, {:page => 1})
       @pager.paged_scope.should == []
     end
