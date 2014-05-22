@@ -1,14 +1,5 @@
-old_verbose, $VERBOSE = $VERBOSE, nil
-RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
-$VERBOSE = old_verbose
- 
-require File.join(File.dirname(__FILE__), 'boot')
+# Load the rails application
+require File.expand_path('../application', __FILE__)
 
-Rails::Initializer.run do |config|
-  config.log_level = :debug
-  config.cache_classes = false
-  config.whiny_nils = true
-  config.active_record.timestamped_migrations = false
-  
-  config.action_controller.session = { :key => "_myapp_session", :secret => "FDSFASDFJSADJFHASGHASKJFHASKDJFHASKDJHFASKJDHFAKSJHFWIUFHASKJDHFASKJDFHASKJDSHFKASDJHFKDSAJHFKSDA" }
-end
+# Initialize the rails application
+RailsRoot::Application.initialize!
