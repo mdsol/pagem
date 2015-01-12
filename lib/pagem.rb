@@ -15,7 +15,12 @@ class Pagem
   end
 
   def icon_link(icon, text, url, options = {})
-    link_to text, url, options.merge(class: "#{options[:class] if options[:class]} iconlink", style: "background-image:url(" + (options[:globalurl] ? icon.to_s : "/images/medidata_buttons/#{icon}.gif") + ")", globalurl: nil)
+    options = options.merge(
+      class: "#{options[:class] if options[:class]} iconlink",
+      style: "background-image:url(" + (options[:global_url] ? icon.to_s : "/images/medidata_buttons/#{icon}.gif") + ")",
+      global_url: nil
+     )
+    link_to text, url, options
   end
 
   def scope
@@ -77,7 +82,7 @@ class Pagem
       options = {:class => 'disabled', :disabled => 'true'}
     end
     options[:class] = (options[:class] ? "iconlink_right #{options[:class]}" : "iconlink_right") if(right_side)
-    options[:globalurl] = true
+    options[:global_url] = true
     return options
   end
 
