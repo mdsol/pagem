@@ -61,8 +61,8 @@ describe Pagem do
     let(:pager) { Pagem.new(scopes, {page: 1}) }
 
     before do
-      scope1.stub_chain(:select, :to_sql).and_return('sql_clause_1')
-      scope2.stub_chain(:select, :to_sql).and_return('sql_clause_2')
+      scope1.stub_chain(:except, :select, :to_sql).and_return('sql_clause_1')
+      scope2.stub_chain(:except, :select, :to_sql).and_return('sql_clause_2')
     end
 
     it 'unions the scopes together' do
@@ -81,7 +81,7 @@ describe Pagem do
     end
 
     it 'returns an array of items' do
-      sql_result = [{'id' => 1, 'model_type' => 'Class1'}, {'id' => 2, 'model_type' => 'Class2'}]
+      sql_result = [{'id' => 1, 'type' => 'Class1'}, {'id' => 2, 'type' => 'Class2'}]
       ActiveRecord::Base.connection.stub(select_all: sql_result)
       item1 = double()
       item2 = double()

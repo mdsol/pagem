@@ -34,13 +34,13 @@ class Pagem
 
   # Returns an array of hashes containing the requested records. Used when pulling records from multiple tables.
   def paged_union_results
-    sql_statements = scope.map { |s| s.select("#{s.primary_key} AS id, #{s.klass} AS model_type").to_sql }
+    sql_statements = scope.map { |s| s.except(:select).select("#{s.primary_key} AS id, #{s.klass} AS type").to_sql }
     pagination_clause = "LIMIT #{items_per_page} OFFSET #{(current_page - 1) * items_per_page}"
     order_clause = @order ? " ORDER BY #{@order.map(&:to_s).join(', ')}" : ''
     query = "#{sql_statements.join(' UNION ')}#{order_clause} #{pagination_clause}"
     query_results = ActiveRecord::Base.connection.select_all(query)
 
-    query_results.map { |record_hash| record_hash['model_type'].constantize.find(record_hash['id']) }
+    query_results.map { |record_hash| record_hash['type'].constantize.find(record_hash['id']) }
   end
 
   def pages
