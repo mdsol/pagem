@@ -55,8 +55,8 @@ describe Pagem do
   end
 
   describe '#paged_union_results' do
-    let(:scope1) { double(klass: 'Class1') }
-    let(:scope2) { double(klass: 'Class2') }
+    let(:scope1) { double(klass: 'Class1', primary_key: 'id') }
+    let(:scope2) { double(klass: 'Class2', primary_key: 'id') }
     let(:scopes) { [scope1, scope2] }
     let(:pager) { Pagem.new(scopes, {page: 1}) }
 
