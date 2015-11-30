@@ -108,8 +108,10 @@ class PagemMultiscope < Pagem
   def initialize(first_scope, second_scope, params, opt = {})
     super(first_scope, params, opt)
     @first_scope, @second_scope = first_scope, second_scope
-    @first_scope_count, @second_scope_count = first_scope.count, second_scope.count
-    @count = @first_scope_count + @second_scope_count
+    @first_scope_count, @second_scope_count = first_scope.size, second_scope.size
+    # Add the scope counts together only if count is a number since if otherwise count should be provided
+    # via the count_number optional arg in the inherited class
+    @count = @first_scope_count + @second_scope_count if @count.is_a?(Integer)
   end
 
   # Return the paginated scope result of some combination of the 2 scopes using the current page and per page
@@ -127,6 +129,8 @@ class PagemMultiscope < Pagem
         @second_scope.limit(items_per_page).offset(start_offset - @first_scope_count)
       # Otherwise return a combined scope of both scopes using the combined scope proc
       else
+        # TODO Implement a better default behavior here if no combine_method instead of just raising
+        raise ArgumentError, 'Multiscope paged scope call must have a method for combining scopes passed in args'
         first_scope = @first_scope.offset(start_offset)
         second_scope = @second_scope.limit(end_offset - @first_scope_count)
         combine_scopes = combine_method.call(first_scope, second_scope)
@@ -135,7 +139,8 @@ class PagemMultiscope < Pagem
       @first_scope.where('0=1')
     end
   end
-  
+
+  # Return nil for inherited scope method because it's ambiguous for multiple scopes
   def scope
     nil
   end
