@@ -130,7 +130,7 @@ class PagemMultiscope < Pagem
       # Otherwise return a combined scope of both scopes using the combined scope proc
       else
         # TODO Implement a better default behavior here if no combine_method instead of just raising
-        raise ArgumentError, 'Multiscope paged scope call must have a method for combining scopes passed in args'
+        raise ArgumentError, 'Multiscope paged scope call must have a method for combining scopes passed in args' unless combine_method
         first_scope = @first_scope.offset(start_offset)
         second_scope = @second_scope.limit(end_offset - @first_scope_count)
         combine_scopes = combine_method.call(first_scope, second_scope)
