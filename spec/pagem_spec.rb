@@ -54,6 +54,43 @@ describe Pagem do
     end
   end
 
+  describe '#paged_union_results' do
+    let(:scope1) { double(klass: 'Class1', primary_key: 'id') }
+    let(:scope2) { double(klass: 'Class2', primary_key: 'id') }
+    let(:scopes) { [scope1, scope2] }
+    let(:pager) { Pagem.new(scopes, {page: 1}) }
+
+    before do
+      scope1.stub_chain(:except, :select, :to_sql).and_return('sql_clause_1')
+      scope2.stub_chain(:except, :select, :to_sql).and_return('sql_clause_2')
+    end
+
+    it 'unions the scopes together' do
+      sql_statement = "sql_clause_1 UNION sql_clause_2 LIMIT #{@pager.items_per_page} OFFSET 0"
+      ActiveRecord::Base.connection.should_receive(:select_all).with(sql_statement).and_return([])
+      pager.paged_union_results
+    end
+
+    it 'adds the order after unioning' do
+      order = [:order_column_1, :order_column_2]
+      ordered_pager = Pagem.new(scopes, {page: 1}, {order: order})
+      sql_statement_with_order = 'sql_clause_1 UNION sql_clause_2 ORDER BY order_column_1, order_column_2 ' +
+                                 "LIMIT #{@pager.items_per_page} OFFSET 0"
+      ActiveRecord::Base.connection.should_receive(:select_all).with(sql_statement_with_order).and_return([])
+      ordered_pager.paged_union_results
+    end
+
+    it 'returns an array of items' do
+      sql_result = [{'id' => 1, 'type' => 'Class1'}, {'id' => 2, 'type' => 'Class2'}]
+      ActiveRecord::Base.connection.stub(select_all: sql_result)
+      item1 = double()
+      item2 = double()
+      Class1 = double(find: item1)
+      Class2 = double(find: item2)
+      expect(pager.paged_union_results).to eq([item1, item2])
+    end
+  end
+
   it "should return the default items per page" do
     @pager.items_per_page.should == 10
   end

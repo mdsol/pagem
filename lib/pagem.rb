@@ -6,25 +6,25 @@ class Pagem
 
   ITEMS_PER_PAGE = 10
 
+  attr_reader :scope, :items_per_page, :count
+
   def initialize(scope, params, opt = {})
     @page_variable = opt[:page_variable] || :page
     @count = opt[:count_number] || scope.count
     @scope = scope
     @params = params
     @items_per_page = opt[:items_per_page] || ITEMS_PER_PAGE
+    # This param should be an array of column names
+    @order = opt[:order]
   end
 
   def icon_link(icon, text, url, options = {})
     options = options.merge(
       class: "#{options[:class] if options[:class]} iconlink",
-      style: "background-image:url(" + (options[:global_url] ? icon.to_s : "/images/medidata_buttons/#{icon}.gif") + ")",
+      style: "background-image:url(#{options[:global_url] ? icon.to_s : "/images/medidata_buttons/#{icon}.gif"})",
       global_url: nil
      )
     link_to text, url, options
-  end
-
-  def scope
-    @scope
   end
 
   # Returns a scope for the currently selected page, or an empty scope if current_page is not valid.
@@ -32,12 +32,15 @@ class Pagem
     (current_page > 0) ? scope.limit(items_per_page).offset((current_page - 1) * items_per_page) : scope.where('0=1')
   end
 
-  def items_per_page
-    @items_per_page
-  end
+  # Returns an array of hashes containing the requested records. Used when pulling records from multiple tables.
+  def paged_union_results
+    sql_statements = scope.map { |s| s.except(:select).select("#{s.primary_key} AS id, #{s.klass} AS type").to_sql }
+    pagination_clause = "LIMIT #{items_per_page} OFFSET #{(current_page - 1) * items_per_page}"
+    order_clause = @order ? " ORDER BY #{@order.map(&:to_s).join(', ')}" : ''
+    query = "#{sql_statements.join(' UNION ')}#{order_clause} #{pagination_clause}"
+    query_results = ActiveRecord::Base.connection.select_all(query)
 
-  def count
-    @count
+    query_results.map { |record_hash| record_hash['type'].constantize.find(record_hash['id']) }
   end
 
   def pages
@@ -46,7 +49,8 @@ class Pagem
 
   def current_page
     page = (@params[@page_variable] || 1).to_i rescue 1
-    page = page < 1 ? 1 : page > pages ? pages : page
+    return 1 if page < 1
+    [page, pages].min
   end
 
   def render(opt = {})

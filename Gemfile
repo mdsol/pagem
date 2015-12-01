@@ -4,6 +4,7 @@ source "http://gems.github.com"
 
 gem "rails",                "=3.1.12"
 gem "echoe"
+gem "sqlite3"
 
 group :test, :development do
   ## If you add gems in this section you will require the gems 
