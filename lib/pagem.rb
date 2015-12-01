@@ -98,3 +98,50 @@ class Pagem
     "if(event.keyCode == 13) Pager.setPage(this, '#{@page_variable}', this.value, #{@is_remote});"
   end
 end
+
+# PagemMultiscope class inherits from Pagem and allows pagination of 2 scopes, returning either the paginated
+# set of the first scope with limit and offset, the paginated set of the second scope with limit and offset,
+# or results of a combined scope proc combining both scopes if the page is rendering a combination
+# of both table records on the same page
+# TODO Move this back to the Pagem class and extend it to allow more than 2 scopes
+class PagemMultiscope < Pagem
+  def initialize(first_scope, second_scope, params, opt = {})
+    super(first_scope, params, opt)
+    @first_scope, @second_scope = first_scope, second_scope
+    @first_scope_count, @second_scope_count = first_scope.size, second_scope.size
+    # Add the scope counts together only if count is a number since if otherwise count should be provided
+    # via the count_number optional arg in the inherited class
+    @count = @first_scope_count + @second_scope_count if @count.is_a?(Integer)
+  end
+
+  # Return the paginated scope result of some combination of the 2 scopes using the current page and per page
+  # as limit and offset, or empty scope
+  def paged_scope(&combine_method)
+    if current_page > 0
+      start_offset = (current_page - 1) * items_per_page
+      end_offset = current_page * items_per_page
+      # If end offset of the current page is less than or equal to the first scope count, return only first scope results
+      if end_offset <= @first_scope_count
+        @first_scope.limit(items_per_page).offset(start_offset)
+      # If starting offset of current page is greater than the first scope count,
+      # return only second scope results
+      elsif start_offset + 1 > @first_scope_count
+        @second_scope.limit(items_per_page).offset(start_offset - @first_scope_count)
+      # Otherwise return a combined scope of both scopes using the combined scope proc
+      else
+        # TODO Implement a better default behavior here if no combine_method instead of just raising
+        raise ArgumentError, 'Multiscope paged scope call must have a method for combining scopes passed in args'
+        first_scope = @first_scope.offset(start_offset)
+        second_scope = @second_scope.limit(end_offset - @first_scope_count)
+        combine_scopes = combine_method.call(first_scope, second_scope)
+      end
+    else
+      @first_scope.where('0=1')
+    end
+  end
+
+  # Return nil for inherited scope method because it's ambiguous for multiple scopes
+  def scope
+    nil
+  end
+end
