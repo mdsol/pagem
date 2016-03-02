@@ -13,7 +13,7 @@ Rails gem pagination helper that works off of scopes (named) to facilitate data 
 
   rvm use  ruby-1.9.3-p125
   bundle install
-  bundle exec rspec spec/pagem_spec.rb
+  bundle exec rspec spec/*
 
 == Usage
 
