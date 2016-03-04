@@ -81,7 +81,8 @@ describe PagemMultiscope do
 
       context 'start_offset +1 > first scope count' do
         it "returns only the first scope" do
-          @multipager = PagemMultiscope.new(scope, second_scope, { page: 200 },          {
+          @multipager = PagemMultiscope.new(scope, second_scope, { page: 200 },
+          {
             count_number: 303,
             first_scope_count: 101,
             second_scope_count: 202

@@ -110,7 +110,6 @@ class PagemMultiscope < Pagem
     @first_scope, @second_scope = first_scope, second_scope
     @first_scope_count = opt[:first_scope_count] || first_scope.size
     @second_scope_count = opt[:second_scope_count] || second_scope.size
-    binding.pry
     if opt[:count_number].blank?
       # Add the scope counts together only if count is a number since if otherwise count should be provided
       # via the count_number optional arg in the inherited class
