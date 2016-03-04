@@ -2,32 +2,38 @@
 
 Rails gem pagination helper that works off of scopes (named) to facilitate data retrieval and display.
 
-== Install 
+== Install
 
   Use the bundler gem (sudo gem install bundler)
   Add the following to your Gemfile
 
     gem "pagem", :git => "git://github.com/mdsol/pagem.git"
-  
+
+== Testing
+
+  rvm use  ruby-1.9.3-p125
+  bundle install
+  bundle exec rspec spec/*
+
 == Usage
 
   === Controller
     In your controller, create an instance of the helper.  Pass your scope and the params hash as arguments.
 
       @pager = Pagem.new(@study.subjects, params)
-    
+
     Retrieve the paged scope from the Pagem instance.
-    
+
       @subjects = @pager.paged_scope
-  
-  
+
+
   === View
-  
+
     In your view, use the paged scope to display the data as you would for any data set.
     Then, render the pagination controls at the bottom.
-    
+
     <%= @pager %>
-    
+
     The pagem class can work with remote forms (AJAX) as well.
-    
+
     <%= @pager.render(:is_remote => true) %>

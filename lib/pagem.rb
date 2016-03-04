@@ -108,10 +108,18 @@ class PagemMultiscope < Pagem
   def initialize(first_scope, second_scope, params, opt = {})
     super(first_scope, params, opt)
     @first_scope, @second_scope = first_scope, second_scope
-    @first_scope_count, @second_scope_count = first_scope.size, second_scope.size
-    # Add the scope counts together only if count is a number since if otherwise count should be provided
-    # via the count_number optional arg in the inherited class
-    @count = @first_scope_count + @second_scope_count if @count.is_a?(Integer)
+    @first_scope_count = opt[:first_scope_count] || first_scope.size
+    @second_scope_count = opt[:second_scope_count] || second_scope.size
+    if opt[:count_number].blank?
+      # Add the scope counts together only if count is a number since if otherwise count should be provided
+      # via the count_number optional arg in the inherited class
+      @count = @first_scope_count + @second_scope_count if @count.is_a?(Integer)
+    elsif @first_scope_count + @second_scope_count != @count
+      # Get the scope sizes if they were not passed in as options
+      @first_scope_count = first_scope.size
+      @second_scope_count = second_scope.size
+      @count = @first_scope_count + @second_scope_count
+    end
   end
 
   # Return the paginated scope result of some combination of the 2 scopes using the current page and per page
