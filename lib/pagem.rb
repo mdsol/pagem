@@ -15,9 +15,10 @@ class Pagem
   end
 
   def icon_link(icon, text, url, options = {})
+    image_url = options[:global_url] ? icon.to_s : image_path("medidata_buttons/#{icon}.gif")
     options = options.merge(
       class: "#{options[:class] if options[:class]} iconlink",
-      style: "background-image:url(" + (options[:global_url] ? icon.to_s : "/images/medidata_buttons/#{icon}.gif") + ")",
+      style: "background-image:url(#{image_url})",
       global_url: nil
      )
     link_to text, url, options
@@ -58,13 +59,26 @@ class Pagem
       href = "##{@page_variable}"
 
       content_tag('div',
-        (icon_link('/assets/pagem/arrow_leftend.gif', I18n.t('application.pagination.first', :default => "First"), href, link_options(1, p > 1)) +
-      icon_link('/assets/pagem/arrow_left.gif', I18n.t('application.pagination.previous', :default => "Previous"), href, link_options(p - 1, p > 1)) +
-      pager_section(p, tp) +
-      icon_link('/assets/pagem/arrow_right.gif', I18n.t('application.pagination.next', :default => "Next"), href, link_options(p + 1, p < tp, true)) +
-      icon_link('/assets/pagem/arrow_rightend.gif', I18n.t('application.pagination.last', :default => "Last"), href, link_options(tp, p < tp, true))) +
-      hidden_field_tag(@page_variable, ""),
-       {:class => 'pagination', :name => @page_variable})
+        (icon_link(image_path('pagem/arrow_leftend.gif'),
+                   I18n.t('application.pagination.first', :default => "First"),
+                   href,
+                   link_options(1, p > 1)) +
+         icon_link(image_path('pagem/arrow_left.gif'),
+                   I18n.t('application.pagination.previous', :default => "Previous"),
+                   href,
+                   link_options(p - 1, p > 1)) +
+         pager_section(p, tp) +
+         icon_link(image_path('pagem/arrow_right.gif'),
+                   I18n.t('application.pagination.next', :default => "Next"),
+                   href,
+                   link_options(p + 1, p < tp, true)) +
+         icon_link(image_path('pagem/arrow_rightend.gif'),
+                   I18n.t('application.pagination.last', :default => "Last"),
+                   href,
+                   link_options(tp, p < tp, true))
+        ) + hidden_field_tag(@page_variable, ""),
+        { class: 'pagination', name: @page_variable }
+      )
     else
       ""
     end
