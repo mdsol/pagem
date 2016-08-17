@@ -1,12 +1,3 @@
-require "pagem/version"
-
-module Pagem
-  module Rails
-    class Engine < ::Rails::Engine
-    end
-  end
-end
-
 class Pagem
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper

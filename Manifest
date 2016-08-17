@@ -4,7 +4,6 @@ Manifest
 README.rdoc
 Rakefile
 lib/pagem.rb
-lib/version.rb
 pagem.gemspec
 rails/init.rb
 rails_root/Gemfile
