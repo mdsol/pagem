@@ -5,11 +5,11 @@ README.rdoc
 Rakefile
 lib/pagem.rb
 pagem.gemspec
-public/images/pagem/arrow_left.gif
-public/images/pagem/arrow_leftend.gif
-public/images/pagem/arrow_right.gif
-public/images/pagem/arrow_rightend.gif
-public/stylesheets/pagem.css
+vendor/assets/images/pagem/arrow_left.gif
+vendor/assets/images/pagem/arrow_leftend.gif
+vendor/assets/images/pagem/arrow_right.gif
+vendor/assets/images/pagem/arrow_rightend.gif
+vendor/assets/stylesheets/pagem.css
 rails/init.rb
 rails_root/Gemfile
 rails_root/README
