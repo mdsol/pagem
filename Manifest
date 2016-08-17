@@ -4,12 +4,8 @@ Manifest
 README.rdoc
 Rakefile
 lib/pagem.rb
+lib/version.rb
 pagem.gemspec
-vendor/assets/images/pagem/arrow_left.gif
-vendor/assets/images/pagem/arrow_leftend.gif
-vendor/assets/images/pagem/arrow_right.gif
-vendor/assets/images/pagem/arrow_rightend.gif
-vendor/assets/stylesheets/pagem.css
 rails/init.rb
 rails_root/Gemfile
 rails_root/README
@@ -37,7 +33,6 @@ rails_root/config/initializers/wrap_parameters.rb
 rails_root/config/locales/en.yml
 rails_root/config/routes.rb
 rails_root/db/seeds.rb
-rails_root/doc/README_FOR_APP
 rails_root/public/404.html
 rails_root/public/422.html
 rails_root/public/500.html
@@ -48,4 +43,10 @@ rails_root/script/rails
 rails_root/test/performance/browsing_test.rb
 rails_root/test/test_helper.rb
 spec/pagem_spec.rb
+spec/pagemmultiscope_spec.rb
 spec/spec_helper.rb
+vendor/assets/images/pagem/arrow_left.gif
+vendor/assets/images/pagem/arrow_leftend.gif
+vendor/assets/images/pagem/arrow_right.gif
+vendor/assets/images/pagem/arrow_rightend.gif
+vendor/assets/stylesheets/pagem.css
