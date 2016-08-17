@@ -5,10 +5,10 @@ migration_dir= "#{rails_root}/db/migrate"
 
 require "#{rails_root}/config/environment.rb"
 require 'fileutils'
-require 'ruby-debug'
+#require 'ruby-debug'
 
 module MedidataButtonsHelpers
 end
 
-Debugger.start
+#Debugger.start
 
