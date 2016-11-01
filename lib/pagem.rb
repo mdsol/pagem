@@ -90,8 +90,8 @@ class Pagem
   end
 
   def pager_section(page_number, total_pages)
-    input = text_field_tag(nil, page_number, maxlength: '5', class: 'current-page', onkeypress: onkeypress_script)
-    content_tag(:li,  safe_join([input, " #{I18n.t('application.pagination.of', default: 'of')} #{total_pages} "]), {:class => 'counter'})
+    input = text_field_tag(nil, page_number, maxlength: '5', class: 'current-page', onkeypress: onkeypress_script, name: 'page-picker')
+    content_tag(:li,  safe_join([input, " #{I18n.t('application.pagination.of', default: 'of')} #{total_pages} "]), {:class => 'counter page_picker'})
   end
 
   def onclick_script(page_number)
