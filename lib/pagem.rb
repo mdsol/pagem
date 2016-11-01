@@ -3,6 +3,7 @@ class Pagem
   include ActionView::Helpers::AssetTagHelper
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::FormTagHelper
+  include ActionView::Helpers::OutputSafetyHelper
 
   ITEMS_PER_PAGE = 10
 
@@ -16,11 +17,12 @@ class Pagem
 
   def icon_link(icon, text, url, options = {})
     options = options.merge(
-      class: "#{options[:class] if options[:class]} iconlink",
-      style: "background-image:url(" + (options[:global_url] ? icon.to_s : "/images/medidata_buttons/#{icon}.gif") + ")",
+      class: "#{options[:class] if options[:class]}",
       global_url: nil
      )
-    link_to text, url, options
+    content = safe_join([content_tag(:span, '', class: "fa fa-#{icon.to_s}"),
+                        content_tag(:span, text, class: 'sr-only')])
+    content_tag(:li, link_to(content, url, options))
   end
 
   def scope
@@ -57,14 +59,16 @@ class Pagem
     if(tp > 1)
       href = "##{@page_variable}"
 
-      content_tag('div',
-        (icon_link('/images/pagem/arrow_leftend.gif', I18n.t('application.pagination.first', :default => "First"), href, link_options(1, p > 1)) +
-      icon_link('/images/pagem/arrow_left.gif', I18n.t('application.pagination.previous', :default => "Previous"), href, link_options(p - 1, p > 1)) +
-      pager_section(p, tp) +
-      icon_link('/images/pagem/arrow_right.gif', I18n.t('application.pagination.next', :default => "Next"), href, link_options(p + 1, p < tp, true)) +
-      icon_link('/images/pagem/arrow_rightend.gif', I18n.t('application.pagination.last', :default => "Last"), href, link_options(tp, p < tp, true))) +
-      hidden_field_tag(@page_variable, ""),
-       {:class => 'pagination', :name => @page_variable})
+      content_tag(:div,
+        content_tag(:ul,
+          safe_join([icon_link('angle-double-left', I18n.t('application.pagination.first', :default => "First"), href, link_options(1, p > 1)),
+                    icon_link('angle-left', I18n.t('application.pagination.previous', :default => "Previous"), href, link_options(p - 1, p > 1)),
+                    pager_section(p, tp),
+                    icon_link('angle-right', I18n.t('application.pagination.next', :default => "Next"), href, link_options(p + 1, p < tp)),
+                    icon_link('angle-double-right', I18n.t('application.pagination.last', :default => "Last"), href, link_options(tp, p < tp)),
+                    hidden_field_tag(@page_variable, "")]),
+          class: 'controls'),
+       {:class => 'paginate clearfix', :name => @page_variable})
     else
       ""
     end
@@ -81,13 +85,13 @@ class Pagem
     else
       options = {:class => 'disabled', :disabled => 'true'}
     end
-    options[:class] = (options[:class] ? "iconlink_right #{options[:class]}" : "iconlink_right") if(right_side)
     options[:global_url] = true
     return options
   end
 
   def pager_section(page_number, total_pages)
-    content_tag('span', text_field_tag(nil, page_number, :maxlength => '5', :style => "width:30px; margin:0;", :onkeypress => onkeypress_script) + " #{I18n.t('application.pagination.of', :default => "of")} #{total_pages} ", {:class => 'page_picker'})
+    input = text_field_tag(nil, page_number, maxlength: '5', class: 'current-page', onkeypress: onkeypress_script)
+    content_tag(:li,  safe_join([input, " #{I18n.t('application.pagination.of', default: 'of')} #{total_pages} "]), {:class => 'counter'})
   end
 
   def onclick_script(page_number)
