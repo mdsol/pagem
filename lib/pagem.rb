@@ -66,7 +66,7 @@ class Pagem
                     pager_section(p, tp),
                     icon_link('angle-right', I18n.t('application.pagination.next', :default => "Next"), href, link_options(p + 1, p < tp)),
                     icon_link('angle-double-right', I18n.t('application.pagination.last', :default => "Last"), href, link_options(tp, p < tp)),
-                    hidden_field_tag(@page_variable, current_page)]),
+                    hidden_field_tag(@page_variable, '')]),
           class: 'controls'),
        {:class => 'paginate clearfix', :name => @page_variable})
     else
